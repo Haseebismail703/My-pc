@@ -1,14 +1,16 @@
 import exprees from 'express'
+import cors from 'cors'     
 const app = exprees()
 
-const port = 3000
+const port = 2000
 app.use(exprees.json())
+app.use(cors())
 let users = [
 
     {   id : 1,
         name: 'John',
         age: 25
-    },
+    },                          
     {
         id : 2 ,
         name: 'Haseeb',
@@ -19,6 +21,7 @@ let users = [
 app.listen(port,()=>{
     console.log('Server is runing');
 })
+
 
 app.get('/',(req,res)=>{
     res.send('Hello World')
@@ -37,3 +40,14 @@ app.delete('/user/:id',(req,res)=>{
     res.send({MEssage : 'User deleted'})
 })
 
+app.put('/user/:id',(req,res)=>{
+    const index = users.findIndex(v=> v.id === Number(req.params.id))
+    if(index !== -1){
+        users.splice(index,1 ,{id :Number(req.params.id),...req.body })
+    }
+    else{
+        console.log('Error-->');
+    }
+    
+    res.send({MEssage : 'User Update'})
+})

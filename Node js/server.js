@@ -1,16 +1,8 @@
-import express from 'express'
+import exprees from 'express'
+const app = exprees()
 
-const app = express()
-const PORT = 2000
-app.use(express.json())
-app.listen(PORT, () => {
-    console.log(`Server is running port ${PORT}`)
-})
-
-app.get('/', (req, res) => {
-    res.send('Hello world')
-})
-
+const port = 3000
+app.use(exprees.json())
 let users = [
 
     {   id : 1,
@@ -24,19 +16,24 @@ let users = [
     }
 
 ]
-app.get('/user', (req, res) => {
+app.listen(port,()=>{
+    console.log('Server is runing');
+})
+
+app.get('/',(req,res)=>{
+    res.send('Hello World')
+})
+app.get('/user',(req,res)=>{
     res.send(users)
 })
-
 app.post('/user',(req,res)=>{
     users.push(req.body)
-    res.send({message : 'Post success'})
+    res.send({MEssage : 'User added'})
 })
-app.delete('/user/:id',(req)=>{
-    let index = users.findIndex(v => v.id === Number(req.params.id))
-    users.splice(index,1)
-    // users.splice(req.body.id,req.params.id)
-    // console.log(req.params.id)
-    
 
+app.delete('/user/:id',(req,res)=>{
+    const index = users.findIndex(v=> v.id === Number(req.params.id))
+    users.splice(index,1)
+    res.send({MEssage : 'User deleted'})
 })
+

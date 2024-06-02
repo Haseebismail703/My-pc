@@ -1,5 +1,5 @@
 import exprees from 'express'
-import cors from 'cors'     
+import cors from 'cors'
 const app = exprees()
 
 const port = 2000
@@ -7,47 +7,59 @@ app.use(exprees.json())
 app.use(cors())
 let users = [
 
-    {   id : 1,
+    {
+        id: 1,
         name: 'John',
         age: 25
-    },                          
+    },
     {
-        id : 2 ,
+        id: 2,
         name: 'Haseeb',
         age: 20
     }
 
 ]
-app.listen(port,()=>{
+app.listen(port, () => {
     console.log('Server is runing');
 })
 
 
-app.get('/',(req,res)=>{
-    res.send('Hello World')
+app.get('/', (req, res) => {
+    return res.send('Hello World')
 })
-app.get('/user',(req,res)=>{
+app.get('/user', (req, res) => {
     res.send(users)
 })
-app.post('/user',(req,res)=>{
-    users.push(req.body)
-    res.send({MEssage : 'User added'})
-})
+app.post('/user', (req, res) => {
+    try {
+        const { name, age } = req.body
+        if (name && age) {
+            users.push({ id: users.length + 1, ...req.body })
+            return res.status(200).send({ status: '200', Message: 'User added' })
+        } else {
+            return res.status(400).send({ status: '400', Message: 'User not added' })
+        }
 
-app.delete('/user/:id',(req,res)=>{
-    const index = users.findIndex(v=> v.id === Number(req.params.id))
-    users.splice(index,1)
-    res.send({MEssage : 'User deleted'})
-})
-
-app.put('/user/:id',(req,res)=>{
-    const index = users.findIndex(v=> v.id === Number(req.params.id))
-    if(index !== -1){
-        users.splice(index,1 ,{id :Number(req.params.id),...req.body })
+    } catch (err) {
+        return res.status(500).send({ status: '500', Message: err.message })
     }
-    else{
+
+})
+
+app.delete('/user/:id', (req, res) => {
+    const index = users.findIndex(v => v.id === Number(req.params.id))
+    users.splice(index, 1)
+    return res.send({ Message: 'User deleted' })
+})
+
+app.put('/user/:id', (req, res) => {
+    const index = users.findIndex(v => v.id === Number(req.params.id))
+    if (index !== -1) {
+        users.splice(index, 1, { id: Number(req.params.id), ...req.body })
+    }
+    else {
         console.log('Error-->');
     }
-    
-    res.send({MEssage : 'User Update'})
+
+    return res.send({ Message: 'User Update' })
 })

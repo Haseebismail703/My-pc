@@ -1,15 +1,16 @@
 import exprees from 'express'
 import cors from 'cors'
-import router from './Routes/index.js'
+import index from './Routes/index.js'
 const app = exprees()
 
 const port = 5000
 app.use(exprees.json())
-app.use(cors())
-app.use('/api',router)
+// app.use(cors())
+app.use('/api',index)
+
 app.use('/',(req,res, next)=>{
-    // console.log('Agai' ,req.query )
-    if(req?.query?.apiKey === '123'){
+    console.log('Agai' ,req.query )
+    if(req.query.apikey === '123'){
        next() 
     }else{
         res.status(400).send({message : 'not allowed'})

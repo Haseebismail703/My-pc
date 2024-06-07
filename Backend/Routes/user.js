@@ -3,20 +3,20 @@ import bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
 const router = express.Router()
 import User from '../models/sch.js'
-// let users = [
-//     {
-//         name: 'Haseeb',
-//         class: '12'
-//     },
-//     {
-//         name: 'Haseeb 2',
-//         class: '123'
-//     }
-// ]
+let users = [
+    {
+        name: 'Haseeb',
+        class: '12'
+    },
+    {
+        name: 'Haseeb 2',
+        class: '123'
+    }
+]
 
-// router.get('/', (req, res) => {
-//     res.status(200).send(users)
-// })
+router.get('/', (req, res) => {
+    res.status(200).send(users)
+})
 router.post('/', async (req, res) => {
     console.log(req.body)
     try {

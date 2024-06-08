@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import chalk from 'chalk'
 import main from './Routes/main.js';
 import mongoose from './db/data.js';
 const app = express();
@@ -7,7 +8,7 @@ const PORT = 4000;
 const db = mongoose.connection
 db.on('error',console.error.bind(console,'Error connection'))
 db.once('open',()=>{
-    console.log('Db connected');
+    console.log(chalk.green('Db connected'));
 })
 
 

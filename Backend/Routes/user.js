@@ -1,6 +1,7 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
-import mongoose from 'mongoose'
+import token from 'jsonwebtoken'
+import Joi from 'joi'
 const router = express.Router()
 import User from '../models/sch.js'
 // let users = [
@@ -14,16 +15,36 @@ import User from '../models/sch.js'
 //     }
 // ]
 
-// router.get('/', (req, res) => {
-//     res.status(200).send(users)
-// })
+router.get('/',async (req, res) => {
+  // const users = await User.find().select('-password')
+  // const users =  await User.findOne({name : "Haseeb"})
+  const users =  await User.findByid({id : "66649bf299b78c7724a74f23"})
+    res.status(200).send(users)
+})
+
+
+
+
+
+const joischema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().required().min(5),
+  created: Joi.date().default(Date.now),
+  status: Joi.string().default('registered')
+});
+
 router.post('/', async (req, res) => {
   console.log(req.body)
+  
   try {
+    
+    await joischema.validateAsync(req.body)
     const password = await bcrypt.hash(req.body.password, 10)
     const u = await new User({ ...req.body, password: password })
-    const news = await u.save()
-    res.status(200).send({ status: 200, user: req.body })
+    const newuser = await u.save()
+    const jwt = token.sign({id : newuser.id ,name : newuser.email},"Haseeb")
+    res.status(200).send({ status: 200, user: req.body,jwt })
   } catch (error) {
     res.status(400).send({ status: 400, error: error.message })
   }
@@ -53,8 +74,8 @@ router.post('/login', async (req, res) => {
     // 4. Construct and send successful response (optional user data)
     const sanitizedUser = { ...user }; // Clone user object
     delete sanitizedUser.password; // Exclude password for security
-
-    res.status(200).send({ status: 200, message: 'Login successful' ,user})
+    const jwt = token.sign({id : user.id,email : user.email},"Haseeb")
+    res.status(200).send({ status: 200, message: 'Login successful' ,user,jwt })
   } catch (error) {
     console.error(error); // Log error for debugging purposes
     res.status(500).send({ status: 500, error: 'Internal server error', });

@@ -15,11 +15,13 @@ import User from '../models/sch.js'
 //     }
 // ]
 
-router.get('/',async (req, res) => {
+router.get('/', async (req, res) => {
   // const users = await User.find().select('-password')
-  // const users =  await User.findOne({name : "Haseeb"})
-  const users =  await User.findByid({id : "66649bf299b78c7724a74f23"})
-    res.status(200).send(users)
+  // const users =  await  User.findOne({name : "Hasseeb"})
+  const users = await
+    User.findById({ _id: "66649bf299b78c7724a74f23" }).select('-password')
+  console.log(users);
+  res.status(200).send(users)
 })
 
 
@@ -36,15 +38,15 @@ const joischema = Joi.object({
 
 router.post('/', async (req, res) => {
   console.log(req.body)
-  
+
   try {
-    
+
     await joischema.validateAsync(req.body)
     const password = await bcrypt.hash(req.body.password, 10)
     const u = await new User({ ...req.body, password: password })
     const newuser = await u.save()
-    const jwt = token.sign({id : newuser.id ,name : newuser.email},"Haseeb")
-    res.status(200).send({ status: 200, user: req.body,jwt })
+    const jwt = token.sign({ id: newuser.id, email: newuser.email }, "Haseeb")
+    res.status(200).send({ status: 200, user: req.body, jwt })
   } catch (error) {
     res.status(400).send({ status: 400, error: error.message })
   }
@@ -74,8 +76,8 @@ router.post('/login', async (req, res) => {
     // 4. Construct and send successful response (optional user data)
     const sanitizedUser = { ...user }; // Clone user object
     delete sanitizedUser.password; // Exclude password for security
-    const jwt = token.sign({id : user.id,email : user.email},"Haseeb")
-    res.status(200).send({ status: 200, message: 'Login successful' ,user,jwt })
+    const jwt = token.sign({ id: user.id, email: user.email }, "Haseeb")
+    res.status(200).send({ status: 200, message: 'Login successful', user, jwt })
   } catch (error) {
     console.error(error); // Log error for debugging purposes
     res.status(500).send({ status: 500, error: 'Internal server error', });

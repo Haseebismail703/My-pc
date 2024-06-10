@@ -14,6 +14,7 @@ const schema = mongoose.Schema({
         type : Schema.Types.String,
         required : true
     },
+    
 })
 
 const user = mongoose.model('user', schema)

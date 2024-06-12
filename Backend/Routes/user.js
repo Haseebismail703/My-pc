@@ -15,8 +15,8 @@ import User from '../models/sch.js'
 //         class: '123'
 //     }
 // ]
-
-router.get('/', verifytoken, async (req, res) => {
+// verifytoken,
+router.get('/', async (req, res) => {
   const users = await User.find().select('-password')
   // const users =  await  User.findOne({name : "Hasseeb"})
   // const users = await

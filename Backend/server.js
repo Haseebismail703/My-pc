@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
     console.log("Socket connect",socket.id)
     socket.on("add",(data)=>{
         console.log("data",data);
-        
+        io.emit("send",data)
     })
   });
   httpserver.listen(PORT,()=>{

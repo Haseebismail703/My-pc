@@ -29,7 +29,7 @@ app.use(cors())
 // })
 
 app.use('/api', main);
-
+// app.use('/api', main);
 // app.listen(PORT, () => {
 //     console.log(`Server is running on port ${PORT}`);
 // });

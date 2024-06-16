@@ -16,6 +16,7 @@ import User from '../models/sch.js'
 //     }
 // ]
 // verifytoken,
+
 router.get('/', async (req, res) => {
   const users = await User.find().select('-password')
   // const users =  await  User.findOne({name : "Hasseeb"})
@@ -37,8 +38,19 @@ const joischema = Joi.object({
   status: Joi.string().default('registered')
 });
 
+
+// router.post('/',(req,res)=>{
+//   console.log(req.body)
+// if(req.body){
+//   res.status(200).send({ status: 200, user: req.body })
+// }
+// else if(error){
+//   res.status(500).json({ message :  error.message })
+// }
+// })
+
 router.post('/', async (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
 
   try {
 
@@ -49,7 +61,8 @@ router.post('/', async (req, res) => {
     const jwt = token.sign({ id: newuser.id, email: newuser.email }, "Haseeb")
     res.status(200).send({ status: 200, user: req.body, jwt })
   } catch (error) {
-    res.status(400).send({ status: 400, error: error.message })
+    console.log(error)
+    res.status(401).json({ error })
   }
 
 })

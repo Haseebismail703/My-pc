@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import token from 'jsonwebtoken'
 import Joi from 'joi'
 import verifytoken from '../middle/token.js'
+import ip from 'ip'
 const router = express.Router()
 import User from '../models/sch.js'
 // let users = [
@@ -18,6 +19,7 @@ import User from '../models/sch.js'
 // verifytoken,
 
 router.get('/', async (req, res) => {
+  console.log(ip.address())
   const users = await User.find().select('-password')
   // const users =  await  User.findOne({name : "Hasseeb"})
   // const users = await
